@@ -4,15 +4,36 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private float maxHP;
     private Transform tf;
     private Rigidbody2D rb2d;
     private SpriteRenderer sr;
     private Animator animator;
 
-    public float speed = 5.0f;
+    /// <summary>
+    /// The movement speed of the player
+    /// </summary>
+    public float movementSpeed = 5.0f;
     public float jumpforce = 10.0f;
     public Transform groundPoint;
     public bool isGrounded = false;
+
+    public float MaxHP
+    {
+        get
+        {
+            return maxHP;
+        }
+        private set
+        {
+            maxHP = value;
+            if (maxHP <= 0)
+            {
+                maxHP = 1;
+                Debug.LogWarning("[PlayerController] Attempted to set maxHP lower than or equal to zero.");
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +47,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xMovement = Input.GetAxis("Horizontal") * speed;
+        float xMovement = Input.GetAxis("Horizontal") * movementSpeed;
         rb2d.velocity = new Vector2(xMovement, rb2d.velocity.y);
         if (xMovement > 0)
         {
